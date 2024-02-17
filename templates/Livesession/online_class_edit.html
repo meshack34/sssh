@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+           <h4>Edit Online Class</h4>
+        </div>
+     </div>
+    <div class="col-md-12">
+        <div class="row">
+          {% if 'online_live_class_edit' in request.permissions or request.user.is_superuser %}    
+            <div class="col-md-4">
+                <div class="card" style="padding: 10px;border-top: 5px solid black;">
+                    <div class="main-header">                       
+                     </div><hr>
+                     {% if not view %}
+                        <h4>Edit Online Class</h4>
+                        {% else %}
+                        <h4>View Online Class</h4>
+                        {% endif %}
+                     <form method="post">
+                        {% csrf_token %}
+                      <div class="row">
+                        {% for data in form %}
+                        <div class="col-md-12 mb-3">
+                            {{data.label_tag}}
+                          {{ data }}
+                        </div>
+                        {% endfor %}
+                      </div><br>
+                      {% if not view %}
+                      <button type="submit" class="btn btn-primary" style="float: right;">Save</button><br><br>
+                      {% endif %}
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            {% if 'online_live_class_view' in request.permissions or request.user.is_superuser %}    
+            <div class="col-md-8">
+              <div class="card" style="padding: 10px;">
+                 <div class="table-responsive">
+                 <table id="tableID" class="display"  >
+                     <thead>
+                         <tr>
+                             <th>Title</th>
+                             <th>Description</th>
+                             <th>Date Time</th>
+                             <th>Class Duration (In Minutes)</th>
+                             <th>Created By</th>
+                             <th>Created For</th>
+                             <th>Class</th>
+                             <th>Status</th>
+                             <th>Action</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         {% for data in records %}
+                           <tr>
+                               <td>{{data.class_title}}</td>
+                               <td>{{data.description}}</td>
+                               <td>{{data.class_date_time}}</td>
+                               <td>{{data.class_duration}}</td>
+                               <td>{{data.created_by}}</td>
+                               <td>{{data.staff}}</td>
+                               
+                                 <td>Class {{ data.Class }}
+                                     ( {% for rec in data.section.all %}
+                                         {{ rec.section_name }}{% if not forloop.last %}, {% endif %}
+                                     {% endfor %})
+                                 </td>
+                             
+                                 <td>
+                                   <span class="label label-{% if data.status == 'Finished' %}success{% elif data.status == 'Awaited' %}warning{% elif data.status == 'Cancelled!' %}danger{% endif %}">{{ data.status }}</span>
+                                 </td>                       
+                                <td>
+                                
+                               <a href="{{data.meeting_url}}"class="bozero"><span data-toggle="tooltip" title="Meeting" style="color: black;" target="_blank"  ><button type="button" class="btn btn-success"><i class='fa fa-video'></i>Start</button></a>
+
+                                {% if 'online_live_class_edit' in request.permissions or request.user.is_superuser %}    
+                               <a href="{% url 'online_class_edit' data.id %}" class="bozero"><span data-toggle="tooltip" title="edit"style="color: black;"><i class='fa fa-edit'></i></a>
+                                
+                                {% endif %}
+                                {% if 'online_live_class_delete' in request.permissions or request.user.is_superuser %}    
+                               <a href="{% url 'online_class_delete' data.id %}" class="bozero"><span data-toggle="tooltip" title="delete"style="color: black;"><i class='fa fa-remove' onclick="alert('You want to Delete this Item..?')"></i></a>
+                                {% endif %}
+                            
+                                </td>
+                         </tr>
+                         {% endfor %}
+                       
+                     </tbody>
+             
+                 </table>
+                 </div>
+              </div>
+          </div>
+          {% endif %}
+        </div>
+    </div>
+
+     
+    </div>
+  
+    
+
+ {% endblock %}
+ {% block script_block %}
+
+ {% endblock  %}

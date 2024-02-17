@@ -1,0 +1,88 @@
+{% extends 'student_base.html' %}
+
+
+{% block body_block %}
+{% load static %} 
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+            <h4>Student Meeting</h4>
+        </div>
+    </div>
+    
+<br>
+<br>
+ <div class="tab-content">
+    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+        <div class="card " >
+            <div class="card-body">
+                <div class="table-responsive around10 pt0">
+                    
+                    <table class="table table-hover  tmb0">
+                        <tbody>
+                            <tr>
+                                <td >Title</td>
+                                <td >
+                                    {{record.class_title}}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>{{record.description}}</td>
+                            </tr>
+                            <tr>
+                                <td>Date Time</td>
+                                <td>{{record.class_date_time}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Meeting Duration (In Minutes)</td>
+                                <td> {{record.class_duration}}</td>
+                            </tr>
+                            <tr>
+                                <td>class</td>
+                                <td> {{record.Class.Class}} </td>
+                            </tr>
+                            <tr>
+                                <td>section</td>
+                                <td>{% for staff in record.section.all %}
+                                    {{ staff.section_name }}                                  
+                                    {% endfor %}</td>
+                            </tr>
+                          
+                         
+                            <tr>
+                                <td>staff</td>                       
+                                <td>
+                                    {{ record.staff.first_name }}                                  
+                                  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Created By</td>                       
+                                <td>
+                                    {{ record.created_by }}                                  
+                                  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>meeting_url</td>
+                                <td>{{record.meeting_url}}
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>      
+        </div>
+    </div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block script_block %}
+
+{% endblock  %}

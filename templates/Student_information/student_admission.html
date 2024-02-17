@@ -1,0 +1,473 @@
+{% extends 'base.html' %}
+
+
+{% block body_block %}
+{% load static %}
+{% load custom_filters %}
+<style>
+    textarea {
+        height: 50px;
+    }
+
+
+</style>
+<div class="container-fluid">
+    <div class="row">
+        {% if 'student_information_view' in request.permissions or request.user.is_superuser %}
+        <div class="main-header">
+            <h4>Student Admission</h4>
+            <a href="{% url 'import_student' %}" class="btn btn-primary btn-sm" style="float: right;"><i
+                    class="fa fa-upload"></i> Import Student</a>
+        </div>
+        {% endif %}
+
+    </div>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="col-md-12">
+            <div class="card" style="padding: 20px;">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission"> Admission No </label>
+                        {{form.admission_no}}
+                    </div>
+                    {% comment %} <div class="col-md-3 mb-3 hidden" {% if 'roll_number' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Roll Number</label>
+                        {{form.roll_number}}
+
+                    </div> {% endcomment %}
+                      <div class="col-md-3 mb-3">
+                        <label for="student_admission">School</label>
+                        {{form.school}}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission">Class</label>
+                        {{form.Class}}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission">Section</label>
+                        {{form.section}}
+                    </div>
+                    
+
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission">First Name</label>
+                        {{form.first_name}}
+                    </div>
+                    <div class="col-md-3 mb-3 hidden" {% if 'last_name' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Last Name</label>
+                        {{form.last_name}}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission">Date of Birth</label>
+                        {{form.date_of_birth}}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="student_admission">Gender</label>
+                        {{form.gender}}
+                    </div>
+                    <!-- <div class="col-md-3 mb-3">
+                    <label for="student_admission">Category</label>
+                        {{form.category}}
+                </div> -->
+                    <div class="col-md-3 mb-3" {% if 'religion' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Religion</label>
+                        {{form.religion}}
+                    </div>
+                    <!-- <div class="col-md-3 mb-3">
+                    <label for="student_admission">Category</label>
+                        {{form.category}}
+                </div> -->
+                    <div class="col-md-3 mb-3" {% if 'caste' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Caste</label>
+                        {{form.Caste}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'mobile_number' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Mobile Number</label>
+                        {{form.mobile_number}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'email' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Email ID</label>
+                        {{form.email}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'admission_date' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Admission Date</label>
+                        {{form.admission_date}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'student_photo' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Student Photo</label>
+                        {{form.student_photo}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'blood_group' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Blood group</label>
+                        {{form.Blood_group}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'student_house' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Student House</label>
+                        {{form.student_house}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'height' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Height</label>
+                        {{form.height}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'weight' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Weight</label>
+                        {{form.weight}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'as_on_date' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">As on Date</label>
+                        {{form.as_on_date}}
+                    </div>
+                    <div class="col-md-3 mb-3" {% if 'category' not in system_fields %} style="display:none;" {% endif %}>
+                        <label for="student_admission">Category</label>
+                        {{form.category}}
+                    </div>
+                    {% if custom_fields %}
+                    {% for data in custom_fields %}
+                    <div class="col-md-{{data.grid}} mb-{{data.grid}}">
+                        {% if data.field_type == 'checkbox' %}
+                        <br>
+                        <label for="{{data.field_name}}_id">{{data.field_name}}</label>
+                        <input type="{{data.field_type}}" name="{{data.field_name}}" id="{{data.field_name}}_id" {% if data.required == True %}required{% endif %}>
+                        {% elif data.field_type == 'textarea' %}
+                        <label for="{{data.field_name}}_id">{{data.field_name}}</label>
+                        <textarea name="{{data.field_name}}" id="{{data.field_name}}_id" class="form-control" {% if data.required == True %}required{% endif %} cols="30" rows="4"></textarea>
+                        {% elif data.field_type == 'select' %}
+                        <label for="{{data.field_name}}_id">{{data.field_name}}</label>
+                        <select name="{{data.field_name}}" id="{{data.field_name}}_id" class="form-control" {% if data.required == True %}required{% endif %}>
+                            {% with data.field_value|split:"," as skills %}
+                            <option value="">------</option>
+                            {% for skill in skills %}
+                            <option value="{{skill}}">{{skill}}</option>
+                            {% endfor %}
+                            {% endwith %}
+                        </select>
+                        {% elif data.field_type == 'multiselect' %}
+                        <label for="{{data.field_name}}_id">{{data.field_name}}</label>
+                        <select name="{{data.field_name}}" id="{{data.field_name}}_id" class="form-control" {% if data.required == True %}required{% endif %} multiple>
+                            {% with data.field_value|split:"," as skills %}
+                            {% for skill in skills %}
+                            <option value="{{skill}}">{{skill}}</option>
+                            {% endfor %}
+                            {% endwith %}
+
+                        </select>
+
+                        {% else %}
+                        <label for="{{data.field_name}}_id">{{data.field_name}}</label>
+                        <input type="{{data.field_type}}" name="{{data.field_name}}" id="{{data.field_name}}_id"
+                            class="form-control" {% if data.required == True %}required{% endif %}>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="main-header">
+                    <h4>Parent Guardian Detail</h4>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card" style="padding: 20px;">
+                    <div class="row card-body">
+                        <div class="col-md-3 mb-3" {% if 'father_name' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Father Name </label>
+                            {{form.Father_name}}
+
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'father_phone' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Father phone</label>
+                            {{form.Father_phone}}
+
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'father_occupation' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Father occupation</label>
+                            {{form.Father_occupation}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'father_photo' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Father photo</label>
+                            {{form.Father_photo}}
+                        </div>
+
+                        <div class="col-md-3 mb-3" {% if 'mother_name' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Mother name</label>
+                            {{form.mother_name}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'mother_phone' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Mother phone</label>
+                            {{form.mother_phone}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'mother_occupation' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Mother occupation</label>
+                            {{form.mother_occupation}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'mother_photo' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Mother photo</label>
+                            {{form.mother_photo}}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="student_admission">If Guardian Is </label>
+                            {{form.if_guardian_is}}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="student_admission">Guardian Name</label>
+                            {{form.guardian_name}}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="student_admission">Guardian Relation</label>
+                            {{form.guardian_relation}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'guardian_email' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Guardian Email</label>
+                            {{form.guardian_email}}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="student_admission">Guardian Phone</label>
+                            {{form.guardian_phone}}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="student_admission">Guardian Occupation</label>
+                            {{form.guardian_occupation}}
+                        </div>
+                        <div class="col-md-3 mb-3" {% if 'guardian_photo' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Guardian Photo</label>
+                            {{form.guardian_photo}}
+                        </div>
+                        <div class="col-md-6 mb-3" {% if 'guardian_address' not in system_fields %} style="display:none;" {% endif %}>
+                            <label for="student_admission">Guardian Address</label>
+                            {{form.guardian_address}}
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- Accortion Start -->
+                <div class="col-lg-12">
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <h4  data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Add More Deatils <button style="float: right;" class="btn ">+</button></h4>
+                                   
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordion">
+                                <div class="card-body">
+                                    <h5 style="background-color: whitesmoke; padding:10px;">Student Address Details</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-6" {% if 'if_permanent_address_is_current_address' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="if_permanent_address_is_current_address"> If Guardian Address is
+                                                Current
+                                                Address {{form.if_permanent_address_is_current_address}}</label>
+
+
+                                        </div>
+                                        <div class="col-md-6 mb-6" {% if 'if_guardian_address_is_current_address' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="guardian_address_is_current_address">If Permanent Address is
+                                                Current Address {{form.guardian_address_is_current_address}} </label>
+
+
+                                        </div>
+                                        <div class="col-md-6 mb-6">
+                                            <label for="student_admission">Current Address</label>
+                                            {{form.current_address}}
+                                        </div>
+                                        <div class="col-md-6 mb-6">
+                                            <label for="student_admission">Permanent Address</label>
+                                            {{form.permanent_address}}
+                                        </div>
+                                    </div>
+                                    <h5 style="background-color: whitesmoke; padding:10px;">Transport Details</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-6" {% if 'route_list' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Route List</label>
+                                            {{form.route_list}}
+                                        </div>
+                                        <div class="col-md-6 mb-6" {% if 'route_list' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Vehicle Number</label>
+                                            {{form.vehicle_number}}
+                                        </div>
+                                    </div>
+                                    <h5 style="background-color: whitesmoke; padding:10px;">Hostel Details</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-6" {% if 'hostel_details' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Hostel</label>
+                                            {{form.hostel}}
+                                        </div>
+                                        <div class="col-md-6 mb-6" {% if 'hostel_details' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Room Number</label>
+                                            {{form.room_number}}
+                                        </div>
+                                    </div>
+                                    <h5 style="background-color: whitesmoke; padding:10px;">Miscellaneous Details</h5>
+
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3" {% if 'bank_deatils' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Bank Account Number</label>
+                                            {{form.bank_account_number}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'bank_deatils' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Bank Name </label>
+                                            {{form.bank_name}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'bank_deatils' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Ifsc Code</label>
+                                            {{form.ifsc_code}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'national_identification_number' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">National Identification
+                                                Number</label>
+                                            {{form.national_identification_number}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'LIN' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Local Identification Number</label>
+                                            {{form.local_identification_number}}
+                                        </div>
+                                        <div class="col-md-3 mb-3"  {% if 'RTE' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">RTE</label>
+                                            {{form.rte}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'previous_school_details' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">Previous School Detail</label>
+                                            {{form.previous_school_detail}}
+                                        </div>
+                                        <div class="col-md-3 mb-3" {% if 'note' not in system_fields %} style="display:none;" {% endif %}>
+                                            <label for="student_admission">NOTE</label>
+                                            {{form.note}}
+                                        </div>
+                                    </div>
+                                    <h5 style="background-color: whitesmoke; padding:10px;">Upload Documents</h5>
+
+                                    <div class="row"  {% if 'upload_documents' not in system_fields %} style="display:none;" {% endif %}>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Title</label>
+                                            {{form.title_1}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Documents</label>
+                                            {{form.documents_1}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Title</label>
+                                            {{form.title_2}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Documents</label>
+                                            {{form.documents_2}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Title</label>
+                                            {{form.title_3}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Documents</label>
+                                            {{form.documents_3}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Title</label>
+                                            {{form.title_4}}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="student_admission">Documents</label>
+                                            {{form.documents_4}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="float: right;">Save</button>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
+{% block script_block %}
+
+
+<script>
+    // JavaScript event listener to handle selection
+    document.getElementById("dropdown").addEventListener("change", function () {
+        var selectedValue = this.value;
+        var selectedOption = this.options[this.selectedIndex];
+        var heading = selectedOption.parentNode.label;
+        console.log("Selected values: " + heading + selectedValue);
+        // Do something with the selected value and heading here
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $(document).on('change', '#id_Class', function () {
+            var class_id = $('#id_Class').val();
+            var url = "{% url 'section_js' %}";
+            $.ajax({
+                url: url,
+                data: {
+                    'class_id': class_id
+                },
+                success: function (data) {
+                    $("#id_section").html(data);
+                    let html_data = '<option value="">--------</option>';
+                    data.forEach(function (section) {
+                        html_data += `<option value="${section.id}">${section.section_name}</option>`
+                    });
+                    console.log(html_data);
+                    $("#id_section").html(html_data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+    });
+</script>
+
+<script>
+    $('#id_if_guardian_is').change(function () {
+        var guardian = $('#id_if_guardian_is').val();
+        if (guardian == 'Father') {
+            var father_name = $('#id_Father_name').val();
+            var father_phone = $('#id_Father_phone').val();
+            var father_occupation = $('#id_Father_occupation').val();
+            $('#id_guardian_name').val(father_name);
+            $('#id_guardian_relation').val(guardian);
+            $('#id_guardian_phone').val(father_phone);
+            $('#id_guardian_occupation').val(father_occupation);
+        } else if (guardian == 'Mother') {
+            var mother_name = $('#id_mother_name').val();
+            var mother_phone = $('#id_mother_phone').val();
+            var Mother_occupation = $('#id_mother_occupation').val();
+            $('#id_guardian_name').val(mother_name);
+            $('#id_guardian_relation').val(guardian);
+            $('#id_guardian_phone').val(mother_phone);
+            $('#id_guardian_occupation').val(Mother_occupation);
+        } else {
+            $('#id_guardian_name').val('');
+            $('#id_guardian_relation').val('');
+            $('#id_guardian_phone').val('');
+            $('#id_guardian_occupation').val('');
+        }
+
+
+    });
+</script>
+{% endblock %}

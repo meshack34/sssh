@@ -1,0 +1,60 @@
+{% extends 'student_base.html' %}
+
+
+{% block body_block %}
+{% load static %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="main-header">
+            <h4>Hostel Room</h4>
+        </div>
+    </div>
+    <div class="col-md-12">
+
+        <div class="card" style="padding: 10px;border-top: 5px solid black;">
+            <div class="main-header">
+                <h4>Hostel Room List</h4>
+            </div>
+            <hr>
+            <div class="table-responsive">
+                <table id="tableID" class="display">
+                    <thead>
+                        <tr>
+                           
+                            <th>Hostel</th>
+                            <th>Room Type</th>
+                            <th>Room Number/Name</th>
+                            <th>Number of Bed</th>
+                            <th>Status</th>
+                            <th>Cost Per Bed</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                       {% if record.room_number %}
+                        <tr>
+                           
+                            <td>{{record.room_number.hostel}}</td>
+                            <td>{{record.room_number.room_type}}</td>
+                            <td>{{record.room_number.room_name}}</td>
+                            <td>{{record.room_number.number_of_bed}}</td>
+                            <td></td>
+                            <td>{{record.room_number.cost_per_bed}}</td>
+                            
+                        </tr>
+                            {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block script_block %}
+
+{% endblock %}
